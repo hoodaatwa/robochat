@@ -1,49 +1,283 @@
-<html lang="en" id="htmm">
+
+<!DOCTYPE html>
+
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>catFact</title>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Robomatic AI Conversation</title>
+
+  <style>
+
+    body {
+
+      font-family: 'Roboto', sans-serif;
+
+      background-color: white;
+
+      margin: 0;
+
+      padding: 0;
+
+      display: flex;
+
+      flex-direction: column;
+
+      min-height: 100vh;
+
+    }
+
+
+
+    #conversationContainer {
+
+      margin: 10px;
+
+      overflow: hidden;
+
+      flex-grow: 1;
+
+      display: flex;
+
+      flex-direction: column-reverse;
+
+      margin-bottom: 90px;
+
+      background-color: #f5f5f5;
+
+      border-radius: 15px;
+
+      border: 5px solid #f5f5f5;
+
+      padding: 5px;
+
+    }
+
+
+
+    .userMessage,
+
+    .botMessage {
+
+      padding: 10px;
+
+      border-radius: 10px;
+
+      margin-bottom: 10px;
+
+      max-width: 70%;
+
+    }
+
+
+
+    .userMessage {
+
+      background-color: #4fc3f7;
+
+      color: #fff;
+
+      align-self: flex-start;
+
+    }
+
+
+
+    .botMessage {
+
+      background-color: #ffe0b2;
+
+      align-self: flex-end;
+
+    }
+
+
+
+    #footer {
+
+      position: fixed;
+
+      bottom: 0;
+
+      left: 0;
+
+      right: 0;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      padding: 20px;
+
+      background-color: #fff;
+
+      border-radius: 15px;
+
+      box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+
+    }
+
+
+
+    #textInput {
+
+      flex-grow: 2;
+
+      margin-right: 10px;
+
+      padding: 12px;
+
+    }
+
+
+
+    #sendButton {
+
+      flex-grow: 1;
+
+      background-color: #f5f5f5;
+
+      color: #000;
+
+      border: none;
+
+      padding: 12px;
+
+      border-radius: 15px;
+
+      cursor: pointer;
+
+    }
+
+  </style>
+
 </head>
+
 <body>
-    <div id="innermost">
-        <div class="box">
-            <div class="price">
-                <div class="egp"><span></span></div>
-            </div>
-        </div>
-        <div class="boxhd">
-            <div id="tail"></div>
-            <div id="tail-mask"></div>
-            <div id="tail-end"></div>
-            <div id="tail1"></div>
-            <div id="tail-mask1"></div>
-            <div id="tail-end1"></div>
-            <div id="tail2"></div>
-            <div id="tail-mask2"></div>
-            <div id="tail-end2"></div>
-            <div id="tail3"></div>
-            <div id="tail-mask3"></div>
-            <div id="tail-end3"></div>
-            <div class="cat">
-                <div class="ear ear--left"></div>
-                <div class="ear ear--right"></div>
-                <div class="face">
-                    <div class="eye eye--left">
-                        <div class="eye-pupil-left"></div>
-                    </div>
-                    <div class="eye eye--right">
-                        <div class="eye-pupil"></div>
-                    </div>
-                    <div class="muzzle"></div>
-                </div>
-            </div>
-        </div>
-        <div class="img0">
-            <h1 class="title">Cat FACT</h1>
-            <h1 class="title title-large">Cat FACT</h1>
-        </div>
-    </div>
+
+
+
+  <div id="conversationContainer"></div>
+
+
+
+  <div id="footer">
+
+    <input type="text" id="textInput" placeholder="Type something in English">
+
+    <button id="sendButton" onclick="generateResponse()">Send</button>
+
+  </div>
+
+
+
+  <script>
+
+    function generateResponse() {
+
+      const inputText = document.getElementById('textInput').value;
+
+      const conversationContainer = document.getElementById('conversationContainer');
+
+
+
+      // Display user message
+
+      const userMessageSpan = document.createElement('span');
+
+      userMessageSpan.className = 'userMessage';
+
+      userMessageSpan.textContent = `${inputText}`;
+
+      conversationContainer.appendChild(userMessageSpan);
+
+      conversationContainer.appendChild(document.createElement('br'));
+
+
+
+      // Send request to Robomatic AI API
+
+      const url = 'https://robomatic-ai.p.rapidapi.com/api';
+
+      const options = {
+
+        method: 'POST',
+
+        headers: {
+
+          'content-type': 'application/x-www-form-urlencoded',
+
+          'X-RapidAPI-Key': 'f6d359abd9msh0d72112f80f8236p1cdd07jsncc0c270b44c5',
+
+          'X-RapidAPI-Host': 'robomatic-ai.p.rapidapi.com'
+
+        },
+
+        body: new URLSearchParams({
+
+          in: inputText,
+
+          op: 'in',
+
+          cbot: '1',
+
+          SessionID: 'RapidAPI1',
+
+          cbid: '1',
+
+          key: 'RHMN5hnQ4wTYZBGCF3dfxzypt68rVP',
+
+          ChatSource: 'RapidAPI',
+
+          duration: '1'
+
+        })
+
+      };
+
+
+
+      fetch(url, options)
+
+        .then(response => response.json())
+
+        .then(data => {
+
+          // Display bot message
+
+          const botMessageSpan = document.createElement('span');
+
+          botMessageSpan.className = 'botMessage';
+
+          botMessageSpan.textContent = `${data.out}`;
+
+          conversationContainer.appendChild(botMessageSpan);
+
+          conversationContainer.appendChild(document.createElement('br'));
+
+
+
+          // Clear the input field
+
+          document.getElementById('textInput').value = '';
+
+        })
+
+        .catch(error => console.error('Error:', error));
+
+    }
+
+  </script>
+
+
+
 </body>
-  </html>
+
+</html>
+
